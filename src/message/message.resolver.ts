@@ -1,7 +1,11 @@
-import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { PubSub } from 'apollo-server-express';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Message } from './message.entity';
+
+const pubSub = new PubSub();
+const MESSAGE_SENT = 'messageSent';
 
 @Resolver()
 export class MessageResolver {
@@ -27,7 +31,15 @@ export class MessageResolver {
     });
 
     await this.messagesRepository.save(message);
+    pubSub.publish(MESSAGE_SENT, {
+      [MESSAGE_SENT]: message,
+    });
 
     return message;
+  }
+
+  @Subscription(() => Message)
+  messageSent() {
+    return pubSub.asyncIterator(MESSAGE_SENT);
   }
 }

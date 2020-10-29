@@ -16,10 +16,10 @@ export class MessageResolver {
   }
 
   @Mutation(() => Message)
-  async messageCreate(): Promise<Message> {
+  async messageSend(@Args('content') content: string, @Args('nickname') nickname: string): Promise<Message> {
     const message = this.messagesRepository.create({
-      content: 'test',
-      createdBy: 'ey',
+      content,
+      createdBy: nickname,
     });
 
     await this.messagesRepository.save(message);

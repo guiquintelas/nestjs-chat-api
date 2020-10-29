@@ -12,7 +12,11 @@ export class MessageResolver {
 
   @Query(() => [Message])
   async messages(): Promise<Message[]> {
-    return this.messagesRepository.find();
+    return this.messagesRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   @Mutation(() => Message)

@@ -19,3 +19,10 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: pass
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'

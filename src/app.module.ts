@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RedisModule } from 'nestjs-redis';
 import { AppController } from './app.controller';
 import { MessageModule } from './message/message.module';
 
@@ -12,6 +13,10 @@ import { MessageModule } from './message/message.module';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
+    }),
+    RedisModule.register({
+      host: process.env.REDIS_HOST,
+      port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
     }),
     MessageModule,
   ],

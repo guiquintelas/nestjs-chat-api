@@ -18,7 +18,7 @@ export class MessageService {
   ) {}
 
   async sendMessage(content: string, nickname: string): Promise<Message> {
-    if (!this.chatService.checkUserInChat(nickname)) {
+    if (!(await this.chatService.checkUserInChat(nickname))) {
       throw new BadRequestException('Please enter the chat before sending any messages!');
     }
 

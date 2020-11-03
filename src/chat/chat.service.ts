@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import * as Redis from 'ioredis';
 import { PubSub } from 'apollo-server-express';
@@ -9,7 +9,7 @@ export const EVENT_CHAT_USER_ENTERED = 'chatUserEntered';
 export const EVENT_CHAT_USER_LEAVED = 'chatUserLeaved';
 
 @Injectable()
-export class ChatService implements OnModuleInit {
+export class ChatService {
   readonly pubSub = new PubSub();
 
   private client: Redis.Redis;
@@ -20,7 +20,7 @@ export class ChatService implements OnModuleInit {
     this.client = redisService.getClient();
   }
 
-  async onModuleInit() {
+  private async loadUsers() {
     this.users = JSON.parse((await this.client.get(CHAT_USERS_TAG)) ?? '[]');
   }
 
@@ -29,6 +29,8 @@ export class ChatService implements OnModuleInit {
   }
 
   async enterChat(nickname: string) {
+    await this.loadUsers();
+
     if (this.users.includes(nickname)) {
       return;
     }
@@ -42,6 +44,8 @@ export class ChatService implements OnModuleInit {
   }
 
   async leaveChat(nickname: string) {
+    await this.loadUsers();
+
     if (!this.users.includes(nickname)) {
       return;
     }
@@ -54,11 +58,13 @@ export class ChatService implements OnModuleInit {
     });
   }
 
-  listUsers() {
+  async listUsers() {
+    await this.loadUsers();
     return this.users;
   }
 
-  checkUserInChat(nickname: string) {
+  async checkUserInChat(nickname: string) {
+    await this.loadUsers();
     return this.users.includes(nickname);
   }
 }

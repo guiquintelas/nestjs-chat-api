@@ -39,7 +39,7 @@ export class MessageService {
   async listMessages(): Promise<Message[]> {
     return this.messagesRepository.find({
       order: {
-        createdAt: 'DESC',
+        createdAt: 'ASC',
       },
     });
   }

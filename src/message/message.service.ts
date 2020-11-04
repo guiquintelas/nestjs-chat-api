@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PubSub } from 'apollo-server-express';
-import { ChatService } from 'src/chat/chat.service';
 import { Repository } from 'typeorm';
+import { ChatService } from '../chat/chat.service';
 import { Message } from './message.entity';
 
 export const EVENT_MESSAGE_SENT = 'messageSent';

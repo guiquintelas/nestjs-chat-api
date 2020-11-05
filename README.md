@@ -10,7 +10,7 @@ git clone https://github.com/guiquintelas/nestjs-chat-api.git
 cd nestjs-chat-api
 cp .env-example .env
 docker-compose up -d
-yarn start:dev
+yarn && yarn start:dev
 
 # access the GraphQL Playground at http://localhost:3000/graphql
 ```

@@ -22,6 +22,7 @@ describe('Chat Module', () => {
   const apolloSubscriptions: any[] = [];
 
   beforeAll(async () => {
+    // initialize nestjs application
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -41,15 +42,19 @@ describe('Chat Module', () => {
   });
 
   afterEach(() => {
+    // closese all subscriptions to not leak any logic between tests
     apolloSubscriptions.forEach((sub) => sub.unsubscribe());
   });
 
   afterAll(async () => {
     await disposeApolloClient(apolloClient, wsLink);
+
+    // the app needs to be closed last
     await app.close();
   });
 
   beforeEach(async () => {
+    // clear redis keys
     await redisClient.flushall();
   });
 

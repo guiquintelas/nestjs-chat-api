@@ -20,14 +20,23 @@ export class ChatService {
     this.client = redisService.getClient();
   }
 
+  /**
+   * Load all users from redis and parses it
+   */
   private async loadUsers() {
     this.users = JSON.parse((await this.client.get(CHAT_USERS_TAG)) ?? '[]');
   }
 
+  /**
+   * Persists all data changed
+   */
   private async save() {
     await this.client.set(CHAT_USERS_TAG, JSON.stringify(this.users));
   }
 
+  /**
+   * Adds new user to the chat and publish as subscription event
+   */
   async enterChat(nickname: string) {
     await this.loadUsers();
 
@@ -43,6 +52,9 @@ export class ChatService {
     });
   }
 
+  /**
+   * Removes user from chat and publish as subscription event
+   */
   async leaveChat(nickname: string) {
     await this.loadUsers();
 
@@ -63,6 +75,9 @@ export class ChatService {
     return this.users;
   }
 
+  /**
+   * Check if a given nickname is present in the chat
+   */
   async checkUserInChat(nickname: string) {
     await this.loadUsers();
     return this.users.includes(nickname);

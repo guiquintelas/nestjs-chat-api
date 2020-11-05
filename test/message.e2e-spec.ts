@@ -25,6 +25,7 @@ describe('Message Module', () => {
   const apolloSubscriptions: any[] = [];
 
   beforeAll(async () => {
+    // initialize nestjs application
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -47,10 +48,13 @@ describe('Message Module', () => {
 
   afterAll(async () => {
     await disposeApolloClient(apolloClient, wsLink);
+
+    // the app needs to be closed last
     await app.close();
   });
 
   beforeEach(async () => {
+    // clear redis keys
     await redisClient.flushall();
     // clear database
     await getConnection().synchronize(true);
@@ -71,11 +75,13 @@ describe('Message Module', () => {
       `,
     });
 
+    // the response should contain the given data
     expect(response.data.messageSend).toMatchObject({
       content: TEST_CONTENT,
       createdBy: TEST_NICKNAME,
     });
 
+    // it should have one the message created above
     const messages = await messageService.listMessages();
     expect(messages).toHaveLength(1);
     expect(messages).toContainEqual(
@@ -130,6 +136,7 @@ describe('Message Module', () => {
       `,
     });
 
+    // it should return exactly the two messages created above
     expect(response.data.messages).toHaveLength(2);
     expect(response.data.messages).toContainEqual(
       expect.objectContaining({

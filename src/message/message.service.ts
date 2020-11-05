@@ -17,6 +17,11 @@ export class MessageService {
     private readonly chatService: ChatService,
   ) {}
 
+  /**
+   * Sends a new message to the chat given the nickname and content given
+   * - Throws an BadRequest error if the nickname given isn't include in chat
+   * - Otherwise publishs the new message as a subscription event
+   */
   async sendMessage(content: string, nickname: string): Promise<Message> {
     if (!(await this.chatService.checkUserInChat(nickname))) {
       throw new BadRequestException('Please enter the chat before sending any messages!');
@@ -36,6 +41,9 @@ export class MessageService {
     return message;
   }
 
+  /**
+   * Lists all messages from chat from oldest to newest
+   */
   async listMessages(): Promise<Message[]> {
     return this.messagesRepository.find({
       order: {

@@ -56,6 +56,8 @@ if you're not on **windows** and getting some error running the `yarn test:debug
   - Features
     - Track online users (users listening for new messages)
     - Multiple group chats
+    - Message Pagination
+    - Refactor both repos to one monorepo
   - Technical Debt
     - Use a dedicated database for testing, or setup a mongo memory mock db
     - Setup a testing redis instance

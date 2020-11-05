@@ -127,23 +127,25 @@ describe('Chat Module', () => {
 
     await chatService.enterChat(TEST_NICKNAME);
 
-    apolloClient
-      .subscribe({
-        query: gql`
-          subscription {
-            chatUserLeaved
-          }
-        `,
-      })
-      .subscribe({
-        next: (res) => {
-          expect(res.data.chatUserLeaved).toBe(TEST_NICKNAME);
-          done();
-        },
-        error: () => {
-          done();
-        },
-      });
+    apolloSubscriptions.push(
+      apolloClient
+        .subscribe({
+          query: gql`
+            subscription {
+              chatUserLeaved
+            }
+          `,
+        })
+        .subscribe({
+          next: (res) => {
+            expect(res.data.chatUserLeaved).toBe(TEST_NICKNAME);
+            done();
+          },
+          error: () => {
+            done();
+          },
+        }),
+    );
 
     await chatService.leaveChat(TEST_NICKNAME);
   });

@@ -4,8 +4,6 @@ A simple real time group chat developed using `NestJS`, `GraphQL` and `MongoDB`!
 
 This is the ``API`` for the [nestjs-chat-front](https://github.com/guiquintelas/nestjs-chat-front) repo
 
-<br>
-
 ### Running
 ``` sh
 git clone https://github.com/guiquintelas/nestjs-chat-api.git
@@ -43,8 +41,6 @@ Using vscode you can use the `.vscode/launch.json` config to attach a debugger u
 
 if you're not on **windows** and getting some error running the `yarn test:debug` command try `yarn test:debug-alter` instead
 
-<br>
-<br>
 
 # ⚙️ Technologies
   - NestJS
@@ -55,7 +51,6 @@ if you're not on **windows** and getting some error running the `yarn test:debug
   - Redis
   - Docker
 
-<br>
 
 # 🚧 Roadmap
   - Features

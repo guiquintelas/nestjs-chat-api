@@ -9,12 +9,15 @@ export class Message {
   @ObjectIdColumn()
   id: ObjectID;
 
+  @Field()
   @Column()
   content: string;
 
+  @Field()
   @Column()
   createdBy: string;
 
+  @Field()
   @CreateDateColumn()
   createdAt: Date;
 }

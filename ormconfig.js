@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+// when in testing environment connect to '' mongo database, using the default 'test' set by mongo itself
 const DB_DATABASE = process.env.NODE_ENV === 'test' ? '' : process.env.DB_DATABASE;
 
 module.exports = {

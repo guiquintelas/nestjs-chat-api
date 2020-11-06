@@ -14,7 +14,6 @@ services:
       - mongo-volume:/data/db
       - ./docker/db:/docker-entrypoint-initdb.d
     environment:
-      MONGO_INITDB_DATABASE: ${DB_DATABASE}
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: pass
       DB_USERNAME: ${DB_USERNAME}

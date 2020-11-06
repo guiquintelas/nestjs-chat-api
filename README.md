@@ -54,12 +54,12 @@ if you're not on **windows** and getting some error running the `yarn test:debug
 
 # 🚧 Roadmap
   - Features
-    - Track online users (users listening for new messages)
-    - Multiple group chats
-    - Message Pagination
-    - Refactor both repos to one monorepo
+    - [ ] Track online users (users listening for new messages)
+    - [ ] Multiple group chats
+    - [ ] Message Pagination
+    - [ ] Refactor both repos to one monorepo
   - Technical Debt
-    - Use a dedicated database for testing, or setup a mongo memory mock db
-    - Setup a testing redis instance
-    - Refactor some code duplication between tests
+    - [x] ~~Use a dedicated database for testing, or setup a mongo memory mock db~~
+    - [ ] Setup a testing redis instance
+    - [ ] Refactor some code duplication between tests
 

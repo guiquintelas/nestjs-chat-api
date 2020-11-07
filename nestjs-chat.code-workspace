@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"debug.node.autoAttach": "on"
+    "debug.node.autoAttach": "on",
+    "typescript.preferences.importModuleSpecifier": "relative",
 	}
 }

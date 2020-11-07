@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PubSub } from 'apollo-server-express';
 import { Repository } from 'typeorm';
+import { publishMessageSent } from 'src/utils/pubSub.manager';
 import { ChatService } from '../chat/chat.service';
 import { Message } from './message.entity';
 
@@ -9,8 +9,6 @@ export const EVENT_MESSAGE_SENT = 'messageSent';
 
 @Injectable()
 export class MessageService {
-  readonly pubSub = new PubSub();
-
   constructor(
     @InjectRepository(Message)
     private messagesRepository: Repository<Message>,
@@ -33,10 +31,7 @@ export class MessageService {
     });
 
     await this.messagesRepository.save(message);
-
-    this.pubSub.publish(EVENT_MESSAGE_SENT, {
-      [EVENT_MESSAGE_SENT]: message,
-    });
+    await publishMessageSent(message);
 
     return message;
   }

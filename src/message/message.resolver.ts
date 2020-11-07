@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver, Subscription, Context } from '@nestjs/graphql';
-import { publishSubConnectionStatus } from 'src/utils/pubSub.manager';
+import { getAsyncIterator, publishSubConnectionStatus } from 'src/utils/pubSub.manager';
 import { withCancel } from 'src/utils/resolver.helper';
 import { Message } from './message.entity';
 import { EVENT_MESSAGE_SENT, MessageService } from './message.service';
@@ -26,7 +26,7 @@ export class MessageResolver {
       payload,
     });
 
-    return withCancel(this.messageService.pubSub.asyncIterator(EVENT_MESSAGE_SENT), async () => {
+    return withCancel(getAsyncIterator(EVENT_MESSAGE_SENT), async () => {
       // on client unsubscribe
       await publishSubConnectionStatus({
         type: 'disconnected',

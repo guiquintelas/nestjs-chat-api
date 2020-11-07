@@ -1,11 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import * as Redis from 'ioredis';
-import {
-  publishUserEnteredChat,
-  publishUserLeavedChat,
-  subscribeToSubConnectionStatus,
-} from 'src/utils/pubSub.manager';
+import { publishUserEnteredChat, publishUserLeavedChat, subscribeToSubConnectionStatus } from '../utils/pubSub.manager';
 
 const CHAT_USERS_TAG = 'chatUsers';
 

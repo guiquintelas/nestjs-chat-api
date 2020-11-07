@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { EVENT_CHAT_USER_ENTERED, EVENT_CHAT_USER_LEAVED, getAsyncIterator } from 'src/utils/pubSub.manager';
+import { EVENT_CHAT_USER_ENTERED, EVENT_CHAT_USER_LEAVED, getAsyncIterator } from '../utils/pubSub.manager';
 import { ChatService } from './chat.service';
 
 @Resolver()

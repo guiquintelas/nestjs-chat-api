@@ -1,8 +1,6 @@
 import { PubSub } from 'apollo-server-express';
 import { Message } from 'src/message/message.entity';
 
-// eslint-disable-next-line no-console
-console.log('PUBSUB Initialized');
 const pubSub = new PubSub();
 
 export const EVENT_SUB_CONNECTION_STATUS = 'SubConnectionStatus';

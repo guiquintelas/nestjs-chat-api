@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver, Subscription, Context } from '@nestjs/graphql';
-import { getAsyncIterator, publishSubConnectionStatus } from 'src/utils/pubSub.manager';
-import { withCancel } from 'src/utils/resolver.helper';
+import { getAsyncIterator, publishSubConnectionStatus } from '../utils/pubSub.manager';
+import { withCancel } from '../utils/resolver.helper';
 import { Message } from './message.entity';
 import { EVENT_MESSAGE_SENT, MessageService } from './message.service';
 

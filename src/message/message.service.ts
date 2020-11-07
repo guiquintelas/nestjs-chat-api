@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { publishMessageSent } from 'src/utils/pubSub.manager';
+import { publishMessageSent } from '../utils/pubSub.manager';
 import { ChatService } from '../chat/chat.service';
 import { Message } from './message.entity';
 

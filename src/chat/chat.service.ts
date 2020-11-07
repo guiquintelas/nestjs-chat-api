@@ -1,9 +1,15 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import * as Redis from 'ioredis';
-import { publishUserEnteredChat, publishUserLeavedChat, subscribeToSubConnectionStatus } from '../utils/pubSub.manager';
+import {
+  publishUserEnteredChat,
+  publishUserLeavedChat,
+  subscribeToSubConnectionStatus,
+  SubConnectionStatusPayload,
+} from '../utils/pubSub.manager';
 
 const CHAT_USERS_TAG = 'chatUsers';
+const CHAT_ONLINE_USERS_TAG = 'chatOnlineUsers';
 
 @Injectable()
 export class ChatService implements OnModuleInit {
@@ -11,14 +17,32 @@ export class ChatService implements OnModuleInit {
 
   private users: string[];
 
+  private onlineUsers: string[];
+
   constructor(redisService: RedisService) {
     this.client = redisService.getClient();
   }
 
   async onModuleInit() {
-    await subscribeToSubConnectionStatus((data) => {
-      console.log(data);
+    await subscribeToSubConnectionStatus(async (data) => {
+      await this.handleSubConnectionStatusChange(data);
     });
+  }
+
+  private async handleSubConnectionStatusChange({ payload, type }: SubConnectionStatusPayload) {
+    await this.loadOnlineUsers();
+
+    const userWasLoggedIn = this.onlineUsers.includes(payload.user);
+
+    if (type === 'disconnected' && userWasLoggedIn) {
+      this.onlineUsers = this.onlineUsers.filter((el) => el !== payload.user);
+    }
+
+    if (type === 'connected' && !userWasLoggedIn) {
+      this.onlineUsers.push(payload.user);
+    }
+
+    await this.save();
   }
 
   /**
@@ -29,10 +53,23 @@ export class ChatService implements OnModuleInit {
   }
 
   /**
+   * Load all online users from redis and parses it
+   */
+  private async loadOnlineUsers() {
+    this.onlineUsers = JSON.parse((await this.client.get(CHAT_ONLINE_USERS_TAG)) ?? '[]');
+  }
+
+  /**
    * Persists all data changed
    */
   private async save() {
-    await this.client.set(CHAT_USERS_TAG, JSON.stringify(this.users));
+    if (typeof this.users !== 'undefined') {
+      await this.client.set(CHAT_USERS_TAG, JSON.stringify(this.users));
+    }
+
+    if (typeof this.onlineUsers !== 'undefined') {
+      await this.client.set(CHAT_ONLINE_USERS_TAG, JSON.stringify(this.onlineUsers));
+    }
   }
 
   /**

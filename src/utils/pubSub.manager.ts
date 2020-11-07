@@ -8,7 +8,7 @@ export const EVENT_CHAT_USER_ENTERED = 'chatUserEntered';
 export const EVENT_CHAT_USER_LEAVED = 'chatUserLeaved';
 export const EVENT_MESSAGE_SENT = 'messageSent';
 
-type SubConnectionStatusPayload = {
+export type SubConnectionStatusPayload = {
   type: 'connected' | 'disconnected';
   payload: {
     user: string;

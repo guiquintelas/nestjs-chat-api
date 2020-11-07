@@ -1,23 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import * as Redis from 'ioredis';
-import { PubSub } from 'apollo-server-express';
+import {
+  publishUserEnteredChat,
+  publishUserLeavedChat,
+  subscribeToSubConnectionStatus,
+} from 'src/utils/pubSub.manager';
 
 const CHAT_USERS_TAG = 'chatUsers';
 
-export const EVENT_CHAT_USER_ENTERED = 'chatUserEntered';
-export const EVENT_CHAT_USER_LEAVED = 'chatUserLeaved';
-
 @Injectable()
-export class ChatService {
-  readonly pubSub = new PubSub();
-
+export class ChatService implements OnModuleInit {
   private client: Redis.Redis;
 
   private users: string[];
 
   constructor(redisService: RedisService) {
     this.client = redisService.getClient();
+  }
+
+  async onModuleInit() {
+    await subscribeToSubConnectionStatus((data) => {
+      console.log(data);
+    });
   }
 
   /**
@@ -46,10 +51,7 @@ export class ChatService {
 
     this.users.push(nickname);
     await this.save();
-
-    this.pubSub.publish(EVENT_CHAT_USER_ENTERED, {
-      [EVENT_CHAT_USER_ENTERED]: nickname,
-    });
+    await publishUserEnteredChat(nickname);
   }
 
   /**
@@ -64,10 +66,7 @@ export class ChatService {
 
     this.users = this.users.filter((el) => el !== nickname);
     await this.save();
-
-    this.pubSub.publish(EVENT_CHAT_USER_LEAVED, {
-      [EVENT_CHAT_USER_LEAVED]: nickname,
-    });
+    await publishUserLeavedChat(nickname);
   }
 
   async listUsers() {

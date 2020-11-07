@@ -1,5 +1,6 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { ChatService, EVENT_CHAT_USER_ENTERED, EVENT_CHAT_USER_LEAVED } from './chat.service';
+import { EVENT_CHAT_USER_ENTERED, EVENT_CHAT_USER_LEAVED, getAsyncIterator } from 'src/utils/pubSub.manager';
+import { ChatService } from './chat.service';
 
 @Resolver()
 export class ChatResolver {
@@ -24,11 +25,11 @@ export class ChatResolver {
 
   @Subscription(() => String)
   chatUserEntered() {
-    return this.chatService.pubSub.asyncIterator(EVENT_CHAT_USER_ENTERED);
+    return getAsyncIterator(EVENT_CHAT_USER_ENTERED);
   }
 
   @Subscription(() => String)
   chatUserLeaved() {
-    return this.chatService.pubSub.asyncIterator(EVENT_CHAT_USER_LEAVED);
+    return getAsyncIterator(EVENT_CHAT_USER_LEAVED);
   }
 }

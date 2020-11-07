@@ -20,7 +20,7 @@ export class MessageService {
   /**
    * Sends a new message to the chat given the nickname and content given
    * - Throws an BadRequest error if the nickname given isn't include in chat
-   * - Otherwise publishs the new message as a subscription event
+   * - Otherwise publishes the new message as a subscription event
    */
   async sendMessage(content: string, nickname: string): Promise<Message> {
     if (!(await this.chatService.checkUserInChat(nickname))) {

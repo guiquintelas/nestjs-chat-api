@@ -6,7 +6,8 @@ import { RedisModule } from 'nestjs-redis';
 import { AppController } from './app.controller';
 import { MessageModule } from './message/message.module';
 import { ChatModule } from './chat/chat.module';
-import { publishSubConnectionStatus } from './utils/pubSub.manager';
+import { publishUserChangedOnlineStatus } from './utils/pubSub.manager';
+import { ConnectionType } from './chat/dtos/chatUserChangedOnlineStatus.dto';
 
 @Module({
   imports: [
@@ -40,9 +41,9 @@ import { publishSubConnectionStatus } from './utils/pubSub.manager';
             return;
           }
 
-          await publishSubConnectionStatus({
-            type: 'disconnected',
-            payload: resolvedConnectPromise,
+          await publishUserChangedOnlineStatus({
+            type: ConnectionType.DISCONNECTED,
+            user: resolvedConnectPromise.user,
           });
         },
       },

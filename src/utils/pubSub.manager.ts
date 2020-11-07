@@ -1,30 +1,20 @@
 import { PubSub } from 'apollo-server-express';
+import { ChatUserChangedOnlineStatus } from 'src/chat/dtos/chatUserChangedOnlineStatus.dto';
 import { Message } from 'src/message/message.entity';
 
 const pubSub = new PubSub();
 
-export const EVENT_SUB_CONNECTION_STATUS = 'SubConnectionStatus';
 export const EVENT_CHAT_USER_ENTERED = 'chatUserEntered';
 export const EVENT_CHAT_USER_LEAVED = 'chatUserLeaved';
+export const EVENT_CHAT_USER_CHANGED_ONLINE_STATUS = 'chatUserChangedOnlineStatus';
 export const EVENT_MESSAGE_SENT = 'messageSent';
-
-export type SubConnectionStatusPayload = {
-  type: 'connected' | 'disconnected';
-  payload: {
-    user: string;
-  };
-};
 
 export const getAsyncIterator = (type: string) => {
   return pubSub.asyncIterator(type);
 };
 
-export const subscribeToSubConnectionStatus = async (callback: (data: SubConnectionStatusPayload) => void) => {
-  return pubSub.subscribe(EVENT_SUB_CONNECTION_STATUS, callback);
-};
-
-export const publishSubConnectionStatus = async (data: SubConnectionStatusPayload) => {
-  return pubSub.publish(EVENT_SUB_CONNECTION_STATUS, data);
+export const subscribeToUserChangedOnlineStatus = async (callback: (data: ChatUserChangedOnlineStatus) => void) => {
+  return pubSub.subscribe(EVENT_CHAT_USER_CHANGED_ONLINE_STATUS, callback);
 };
 
 export const publishUserEnteredChat = async (user: string) => {
@@ -36,6 +26,12 @@ export const publishUserEnteredChat = async (user: string) => {
 export const publishUserLeavedChat = async (user: string) => {
   return pubSub.publish(EVENT_CHAT_USER_LEAVED, {
     [EVENT_CHAT_USER_LEAVED]: user,
+  });
+};
+
+export const publishUserChangedOnlineStatus = async (payload: ChatUserChangedOnlineStatus) => {
+  return pubSub.publish(EVENT_CHAT_USER_CHANGED_ONLINE_STATUS, {
+    [EVENT_CHAT_USER_CHANGED_ONLINE_STATUS]: payload,
   });
 };
 

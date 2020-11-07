@@ -1,12 +1,12 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { RedisService } from 'nestjs-redis';
 import * as Redis from 'ioredis';
+import { RedisService } from 'nestjs-redis';
 import {
   publishUserEnteredChat,
   publishUserLeavedChat,
-  subscribeToSubConnectionStatus,
-  SubConnectionStatusPayload,
+  subscribeToUserChangedOnlineStatus,
 } from '../utils/pubSub.manager';
+import { ChatUserChangedOnlineStatus } from './dtos/chatUserChangedOnlineStatus.dto';
 
 const CHAT_USERS_TAG = 'chatUsers';
 const CHAT_ONLINE_USERS_TAG = 'chatOnlineUsers';
@@ -24,22 +24,18 @@ export class ChatService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await subscribeToSubConnectionStatus(async (data) => {
+    await subscribeToUserChangedOnlineStatus(async (data) => {
       await this.handleSubConnectionStatusChange(data);
     });
   }
 
-  private async handleSubConnectionStatusChange({ payload, type }: SubConnectionStatusPayload) {
+  private async handleSubConnectionStatusChange({ type, user }: ChatUserChangedOnlineStatus) {
     await this.loadOnlineUsers();
 
-    const userWasLoggedIn = this.onlineUsers.includes(payload.user);
-
-    if (type === 'disconnected' && userWasLoggedIn) {
-      this.onlineUsers = this.onlineUsers.filter((el) => el !== payload.user);
-    }
-
-    if (type === 'connected' && !userWasLoggedIn) {
-      this.onlineUsers.push(payload.user);
+    if (type === 'disconnected') {
+      this.onlineUsers = this.onlineUsers.filter((el) => el !== user);
+    } else if (type === 'connected') {
+      this.onlineUsers.push(user);
     }
 
     await this.save();

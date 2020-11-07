@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver, Subscription, Context } from '@nestjs/graphql';
-import { ConnectionType } from 'src/chat/dtos/chatUserChangedOnlineStatus.dto';
+import { ConnectionType } from '../chat/dtos/chatUserChangedOnlineStatus.dto';
 import { getAsyncIterator, publishUserChangedOnlineStatus } from '../utils/pubSub.manager';
 import { withCancel } from '../utils/resolver.helper';
 import { Message } from './message.entity';
@@ -22,17 +22,21 @@ export class MessageResolver {
   @Subscription(() => Message)
   async messageSent(@Context() { payload }: any) {
     // on client subscribe
-    await publishUserChangedOnlineStatus({
-      type: ConnectionType.CONNECTED,
-      user: payload.user,
-    });
+    if (payload?.user) {
+      await publishUserChangedOnlineStatus({
+        type: ConnectionType.CONNECTED,
+        user: payload.user,
+      });
+    }
 
     return withCancel(getAsyncIterator(EVENT_MESSAGE_SENT), async () => {
       // on client unsubscribe
-      await publishUserChangedOnlineStatus({
-        type: ConnectionType.DISCONNECTED,
-        user: payload.user,
-      });
+      if (payload?.user) {
+        await publishUserChangedOnlineStatus({
+          type: ConnectionType.DISCONNECTED,
+          user: payload.user,
+        });
+      }
     });
   }
 }

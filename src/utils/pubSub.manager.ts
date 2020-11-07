@@ -1,6 +1,6 @@
 import { PubSub } from 'apollo-server-express';
-import { ChatUserChangedOnlineStatus } from 'src/chat/dtos/chatUserChangedOnlineStatus.dto';
-import { Message } from 'src/message/message.entity';
+import { ChatUserChangedOnlineStatus } from '../chat/dtos/chatUserChangedOnlineStatus.dto';
+import { Message } from '../message/message.entity';
 
 const pubSub = new PubSub();
 

@@ -1,6 +1,12 @@
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { EVENT_CHAT_USER_ENTERED, EVENT_CHAT_USER_LEAVED, getAsyncIterator } from '../utils/pubSub.manager';
+import {
+  EVENT_CHAT_USER_CHANGED_ONLINE_STATUS,
+  EVENT_CHAT_USER_ENTERED,
+  EVENT_CHAT_USER_LEAVED,
+  getAsyncIterator,
+} from '../utils/pubSub.manager';
 import { ChatService } from './chat.service';
+import { ChatUserChangedOnlineStatus } from './dtos/chatUserChangedOnlineStatus.dto';
 
 @Resolver()
 export class ChatResolver {
@@ -31,5 +37,10 @@ export class ChatResolver {
   @Subscription(() => String)
   chatUserLeaved() {
     return getAsyncIterator(EVENT_CHAT_USER_LEAVED);
+  }
+
+  @Subscription(() => ChatUserChangedOnlineStatus)
+  chatUserChangedOnlineStatus() {
+    return getAsyncIterator(EVENT_CHAT_USER_CHANGED_ONLINE_STATUS);
   }
 }

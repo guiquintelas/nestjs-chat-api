@@ -54,7 +54,7 @@ if you're not on **windows** and getting some error running the `yarn test:debug
 
 # 🚧 Roadmap
   - Features
-    - [ ] Track online users (users listening for new messages)
+    - [x] ~~Track online users (users listening for new messages)~~
     - [ ] Multiple group chats
     - [ ] Message Pagination
     - [ ] Refactor both repos to one monorepo

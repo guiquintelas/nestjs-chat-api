@@ -13,8 +13,10 @@ export const getAsyncIterator = (type: string) => {
   return pubSub.asyncIterator(type);
 };
 
-export const subscribeToUserChangedOnlineStatus = async (callback: (data: ChatUserChangedOnlineStatus) => void) => {
-  return pubSub.subscribe(EVENT_CHAT_USER_CHANGED_ONLINE_STATUS, callback);
+export const subscribeToUserChangedOnlineStatus = async (callback: (payload: ChatUserChangedOnlineStatus) => void) => {
+  return pubSub.subscribe(EVENT_CHAT_USER_CHANGED_ONLINE_STATUS, (data) =>
+    callback(data[EVENT_CHAT_USER_CHANGED_ONLINE_STATUS]),
+  );
 };
 
 export const publishUserEnteredChat = async (user: string) => {

@@ -6,7 +6,7 @@ import {
   publishUserLeavedChat,
   subscribeToUserChangedOnlineStatus,
 } from '../utils/pubSub.manager';
-import { ChatUserChangedOnlineStatus } from './dtos/chatUserChangedOnlineStatus.dto';
+import { ChatUserChangedOnlineStatus, ConnectionType } from './dtos/chatUserChangedOnlineStatus.dto';
 
 const CHAT_USERS_TAG = 'chatUsers';
 const CHAT_ONLINE_USERS_TAG = 'chatOnlineUsers';
@@ -36,9 +36,9 @@ export class ChatService implements OnModuleInit {
   private async handleSubConnectionStatusChange({ type, user }: ChatUserChangedOnlineStatus) {
     await this.loadOnlineUsers();
 
-    if (type === 'disconnected') {
+    if (type === ConnectionType.DISCONNECTED) {
       this.onlineUsers = this.onlineUsers.filter((el) => el !== user);
-    } else if (type === 'connected') {
+    } else if (type === ConnectionType.CONNECTED) {
       this.onlineUsers.push(user);
     }
 

@@ -27,6 +27,10 @@ export class ChatService implements OnModuleInit {
     await subscribeToUserChangedOnlineStatus(async (data) => {
       await this.handleSubConnectionStatusChange(data);
     });
+
+    // clear online users
+    this.onlineUsers = [];
+    await this.save();
   }
 
   private async handleSubConnectionStatusChange({ type, user }: ChatUserChangedOnlineStatus) {

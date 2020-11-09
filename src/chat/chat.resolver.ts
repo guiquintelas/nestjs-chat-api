@@ -17,6 +17,11 @@ export class ChatResolver {
     return this.chatService.listUsers();
   }
 
+  @Query(() => [String])
+  async chatListOnlineUsers() {
+    return this.chatService.listOnlineUsers();
+  }
+
   @Mutation(() => Boolean)
   async chatEnter(@Args('nickname') nickname: string): Promise<Boolean> {
     await this.chatService.enterChat(nickname);

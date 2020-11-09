@@ -107,6 +107,11 @@ export class ChatService implements OnModuleInit {
     return this.users;
   }
 
+  async listOnlineUsers() {
+    await this.loadOnlineUsers();
+    return this.onlineUsers;
+  }
+
   /**
    * Check if a given nickname is present in the chat
    */
